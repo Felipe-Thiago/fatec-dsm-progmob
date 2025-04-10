@@ -1,5 +1,4 @@
 let express = require("express");
-let bodyParse = require("body-parser");
 let cors = require('cors');
 let mongoose = require('mongoose');
 let methodOverride = require("method-override");
@@ -41,8 +40,10 @@ let User = mongoose.model("Usuario", new mongoose.Schema({name: String}))
 
 
 // pasta raiz/rota padrão
-app.get("/", (req, res) => {
-    res.send({status: 'ok'});
+app.get("/", async (req, res) => {
+    const users = await User.find({})
+
+    res.send(users);
 });
 
 app.post("/add", async (req, res) => {
@@ -53,6 +54,32 @@ app.post("/add", async (req, res) => {
     // comando do mongodb
     item.save();
     res.send({status: "adicionado"})
+})
+
+//PUT
+app.put('/update/:id', async(req, res) =>{
+    //pegando o parametro via url
+    const id = req.params.id;
+    //dado do header
+    const dados = req.body;
+    //objeto model
+    const u = await User.findByIdAndUpdate(id, dados);
+    if(u){
+        res.send({status: 'alterado'})
+    } else{
+        res.send({status: 'erro'})
+    }
+})
+
+//delete
+app.delete("/delete/:id", async(req,res)=>{
+    let id = req.params.id;
+    let i = await User.findByIdAndDelete(id);
+    if(i){
+        res.send({status: 'deletado'})
+    } else{
+        res.send({status: 'erro'})
+    }
 })
 
 //criar o servidor
