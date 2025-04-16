@@ -22,3 +22,5 @@ Iniciar aplicação:
     npm install express body-parser method-override mongoose nodemon
     npm install cors --save
 ```
+
+# Aula 6

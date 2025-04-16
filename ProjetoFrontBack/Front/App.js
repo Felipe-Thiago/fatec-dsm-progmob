@@ -1,10 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
+import ExibirDado from './components/Exibir';
 
 export default function App() {
+  // Será utilizada para armazenar os dados do banco de dados
+  const [campos, setCampos] = useState([]);
+  const host = "http://10.68.153.215:3000"
   
+  // Renderizar - Dois parâmetros, a conexão (arrow func) e o tratamento
+  useEffect(() => {
+    fetch(`${host}/`).then(
+      (res) => {return res.json()}
+    ).then(
+      (json) => {
+        console.log(json)
+        setCampos(json);
+      }
+    )
+  }, []); //executa a função apenas uma vez, evita uma lista infinita de requisições
+
   const addUser = () => {
-    fetch('http://10.68.153.91:3000/add/', {
+    fetch(`${host}/add/`, {
       method: 'POST',
       body: JSON.stringify({
         name: 'Felipe'
@@ -20,7 +37,7 @@ export default function App() {
   }
   
   const Exibir = () => {
-    fetch('http://10.68.153.91:3000/').then(
+    fetch(`${host}/`).then(
       (res) => {return res.json()} //quando tem chaves precisa de return
     ).then(
       (json) => {console.log(json)}
@@ -28,7 +45,7 @@ export default function App() {
   }
 
   const Atualizar0 = (id) => {
-    fetch(`http://10.68.153.91:3000/update/${id}`, {
+    fetch(`${host}/update/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
         name: 'xx'
@@ -43,7 +60,7 @@ export default function App() {
 
   //delete
   const Deletar = (id) => {
-    fetch(`http://10.68.153.91:3000/delete/${id}`, {
+    fetch(`${host}/delete/${id}`, {
       method: 'DELETE',
     }).then((res)=> res.json())
     .then((json) => console.log(json))
@@ -51,9 +68,15 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <ScrollView>
       <Button 
         title='Exibir'
         onPress={() => {Exibir()}}
+      />
+
+      <Button 
+        title='AddUser'
+        onPress={() => {addUser()}}
       />
 
       <Button 
@@ -66,7 +89,10 @@ export default function App() {
         onPress={() => {Deletar("67f70e06b81eb5eca76190c9")}}
       />
       
+      <ExibirDado campo={campos}/>
+      
       <StatusBar style="auto" />
+      </ScrollView>
     </View>
   );
 }
