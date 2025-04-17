@@ -53,7 +53,7 @@ app.post("/add", async (req, res) => {
     let item = await new User({name: vnome});
     // comando do mongodb
     item.save();
-    res.send({status: "adicionado"})
+    res.json({status: "adicionado"})
 })
 
 //PUT

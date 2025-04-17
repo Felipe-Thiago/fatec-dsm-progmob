@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import ExibirDado from './components/Exibir';
+import InserirDado from './components/Inserir';
 
 export default function App() {
   // Será utilizada para armazenar os dados do banco de dados
@@ -88,7 +89,8 @@ export default function App() {
         title='Deletar'
         onPress={() => {Deletar("67f70e06b81eb5eca76190c9")}}
       />
-      
+
+      <InserirDado />
       <ExibirDado campo={campos}/>
       
       <StatusBar style="auto" />
