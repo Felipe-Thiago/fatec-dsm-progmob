@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import DeletarDado from './Deletar';
+import EditarDado from './Editar';
+
 
 const ExibirDado = (props)=> {
     return (
@@ -18,13 +20,15 @@ const ExibirDado = (props)=> {
                         <Text>Id: {item._id}</Text>
                         <Text>Nome: {item.name}</Text>
                         <DeletarDado id={item._id}/>
+                        <EditarDado id={item._id}/>
                     </View>
                     )
                 }}
             
             />
         </View>
-    )       
+    )
+           
 }           
 
 export default ExibirDado;

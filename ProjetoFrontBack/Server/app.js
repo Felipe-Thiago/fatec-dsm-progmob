@@ -39,11 +39,11 @@ mongoose.connect(url)
 let User = mongoose.model("Usuario", new mongoose.Schema({name: String}))
 
 
-// pasta raiz/rota padrão
+// pasta raiz/rota padrão (get find())
 app.get("/", async (req, res) => {
     const users = await User.find({})
-
-    res.send(users);
+    res.json(users);
+    // é assincrono para esperar a resposta do banco de dados para depois trazer
 });
 
 app.post("/add", async (req, res) => {

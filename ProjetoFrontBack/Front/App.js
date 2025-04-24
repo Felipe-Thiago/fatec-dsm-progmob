@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import ExibirDado from './components/Exibir';
 import InserirDado from './components/Inserir';
+import { RadioButton } from 'react-native-paper';
 
 export default function App() {
   // Será utilizada para armazenar os dados do banco de dados
@@ -10,7 +11,7 @@ export default function App() {
   const host = "http://10.68.153.215:3000"
   
   // Renderizar - Dois parâmetros, a conexão (arrow func) e o tratamento
-  useEffect(() => {
+  const fetchDados = () => {
     fetch(`${host}/`).then(
       (res) => {return res.json()}
     ).then(
@@ -19,6 +20,10 @@ export default function App() {
         setCampos(json);
       }
     )
+  }
+  
+  useEffect(() => {
+    fetchDados();
   }, []); //executa a função apenas uma vez, evita uma lista infinita de requisições
 
   const addUser = () => {
@@ -33,16 +38,18 @@ export default function App() {
     }).then(
       (res) => {res.json()}
     ).then(
-      (json) => {console.log(json)}
+      (json) => {console.log(json); fetchDados();}
     )
   }
+  
   
   const Exibir = () => {
     fetch(`${host}/`).then(
       (res) => {return res.json()} //quando tem chaves precisa de return
     ).then(
-      (json) => {console.log(json)}
+      (json) => {console.log(json); fetchDados();}
     )
+    
   }
 
   const Atualizar0 = (id) => {
@@ -56,7 +63,7 @@ export default function App() {
       }
     })
     .then((res) => res.json())
-    .then((json) => console.log(json))
+    .then((json) => {console.log(json); fetchDados();})
   } 
 
   //delete
@@ -64,7 +71,7 @@ export default function App() {
     fetch(`${host}/delete/${id}`, {
       method: 'DELETE',
     }).then((res)=> res.json())
-    .then((json) => console.log(json))
+    .then((json) => {console.log(json); fetchDados();})
   }
 
   return (
@@ -82,12 +89,12 @@ export default function App() {
 
       <Button 
         title='Atualizar'
-        onPress={() => {Atualizar0("67f70e06b81eb5eca76190c9")}}
+        onPress={() => {Atualizar0("68098a2fce490dc872aac2b1")}}
       />
       
       <Button 
         title='Deletar'
-        onPress={() => {Deletar("67f70e06b81eb5eca76190c9")}}
+        onPress={() => {Deletar("68098a2fce490dc872aac2b1")}}
       />
 
       <InserirDado />

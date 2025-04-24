@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button } from "react-native";
+import { RadioButton } from 'react-native-paper';
 
 const InserirDado = (props) => {    
     const [nome, setNome] = useState("");
+    const [sobrenome, setSobrenome] = useState("");
+    const [checked, setChecked] = useState('Masculino');
+    const host = "http://10.68.153.215:3000"
 
     const addUser = () => {
-        fetch(`http://10.68.153.215:3000/add/`, {
+        fetch(`${host}/add/`, {
           method: 'POST',
           body: JSON.stringify({
-            name: nome
+            name: nome,
+            surname: sobrenome,
+            gender: checked,
           }),
           headers: {
             'Content-Type': 'application/json; charset=utf-8'
@@ -16,7 +22,7 @@ const InserirDado = (props) => {
         }).then(
           (res) => {res.json()}
         ).then(
-          (json) => {console.log(json)}
+          (json) => {console.log(json);}
         )
       }
 
@@ -30,6 +36,31 @@ const InserirDado = (props) => {
             <TextInput 
                 onChangeText={(text) => {setNome(text)}}
             />
+            <Text>Sobrenome</Text>
+            <TextInput 
+              onChangeText={(text) => {setSobrenome(text)}}
+            />
+            <Text>Sexo</Text>
+            <View>
+              <RadioButton 
+                value="Masculino" 
+                status={checked === "Masculino" ? "checked" : "unchecked"}
+                onPress={() => setChecked("Masculino")}
+                label="Masculino"
+              />
+              <Text>Masculino</Text>
+            </View>
+             
+            <View>
+              
+            </View>
+            <RadioButton 
+              value="Feminino" 
+              status={checked === "Feminino" ? "checked" : "unchecked"}
+              onPress={() => setChecked("Feminino")}
+              label="Feminino"
+            > <Text>Feminino</Text>
+              </RadioButton>
             <Button 
                 title="Cadastrar"
                 onPress={()=> {addUser()}}
