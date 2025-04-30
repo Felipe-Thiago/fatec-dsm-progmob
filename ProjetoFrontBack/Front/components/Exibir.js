@@ -19,6 +19,8 @@ const ExibirDado = (props)=> {
                         }}>
                         <Text>Id: {item._id}</Text>
                         <Text>Nome: {item.name}</Text>
+                        <Text>Sobrenome: {item.surname}</Text>
+                        <Text>Sexo: {item.gender}</Text>
                         <DeletarDado id={item._id}/>
                         <EditarDado id={item._id}/>
                     </View>

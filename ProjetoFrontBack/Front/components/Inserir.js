@@ -5,8 +5,8 @@ import { RadioButton } from 'react-native-paper';
 const InserirDado = (props) => {    
     const [nome, setNome] = useState("");
     const [sobrenome, setSobrenome] = useState("");
-    const [checked, setChecked] = useState('Masculino');
-    const host = "http://10.68.153.215:3000"
+    const host = "http://localhost:3000"
+    const [value, setValue] = useState('');
 
     const addUser = () => {
         fetch(`${host}/add/`, {
@@ -14,7 +14,7 @@ const InserirDado = (props) => {
           body: JSON.stringify({
             name: nome,
             surname: sobrenome,
-            gender: checked,
+            gender: value,
           }),
           headers: {
             'Content-Type': 'application/json; charset=utf-8'
@@ -41,26 +41,11 @@ const InserirDado = (props) => {
               onChangeText={(text) => {setSobrenome(text)}}
             />
             <Text>Sexo</Text>
-            <View>
-              <RadioButton 
-                value="Masculino" 
-                status={checked === "Masculino" ? "checked" : "unchecked"}
-                onPress={() => setChecked("Masculino")}
-                label="Masculino"
-              />
-              <Text>Masculino</Text>
-            </View>
-             
-            <View>
-              
-            </View>
-            <RadioButton 
-              value="Feminino" 
-              status={checked === "Feminino" ? "checked" : "unchecked"}
-              onPress={() => setChecked("Feminino")}
-              label="Feminino"
-            > <Text>Feminino</Text>
-              </RadioButton>
+            <RadioButton.Group onValueChange={newValue => setValue(newValue)} value={value}>
+              <RadioButton.Item label="Masculino" value="Masculino"/>
+              <RadioButton.Item label="Feminino" value="Feminino"/>
+            </RadioButton.Group>
+          
             <Button 
                 title="Cadastrar"
                 onPress={()=> {addUser()}}

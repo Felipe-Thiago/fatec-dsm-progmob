@@ -3,7 +3,7 @@ import { View, Pressable, Text } from 'react-native';
 
 const DeletarDado = (props) => {
     const Deletar = async (id) => {
-        await fetch(`http://10.68.153.215:3000/delete/${id}`, {
+        await fetch(`http://localhost:3000/delete/${id}`, {
           method: 'DELETE',
         }).then((res)=> res.json())
         .then((json) => console.log(json))

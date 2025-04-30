@@ -8,7 +8,7 @@ import { RadioButton } from 'react-native-paper';
 export default function App() {
   // Será utilizada para armazenar os dados do banco de dados
   const [campos, setCampos] = useState([]);
-  const host = "http://10.68.153.215:3000"
+  const host = "http://localhost:3000"
   
   // Renderizar - Dois parâmetros, a conexão (arrow func) e o tratamento
   const fetchDados = () => {
@@ -30,7 +30,9 @@ export default function App() {
     fetch(`${host}/add/`, {
       method: 'POST',
       body: JSON.stringify({
-        name: 'Felipe'
+        name: 'Felipe',
+        surname: 'Thiago',
+        gender: 'Masculino'
       }),
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
@@ -56,7 +58,9 @@ export default function App() {
     fetch(`${host}/update/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
-        name: 'xx'
+        name: 'xx',
+        surname: 'yy',
+        gender: 'Feminino'
       }),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8'
@@ -89,12 +93,12 @@ export default function App() {
 
       <Button 
         title='Atualizar'
-        onPress={() => {Atualizar0("68098a2fce490dc872aac2b1")}}
+        onPress={() => {Atualizar0("68128798735d70d7f25d4c72")}}
       />
       
       <Button 
         title='Deletar'
-        onPress={() => {Deletar("68098a2fce490dc872aac2b1")}}
+        onPress={() => {Deletar("68128798735d70d7f25d4c72")}}
       />
 
       <InserirDado />

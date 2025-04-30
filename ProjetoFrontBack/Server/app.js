@@ -49,8 +49,10 @@ app.get("/", async (req, res) => {
 app.post("/add", async (req, res) => {
     // pegar os dados
     let vnome = req.body.name;
+    let vsobrenome = req.body.surname;
+    let vsexo = req.body.gender;
     
-    let item = await new User({name: vnome});
+    let item = await new User({name: vnome, surname: vsobrenome, gender: vsexo});
     // comando do mongodb
     item.save();
     res.json({status: "adicionado"})
