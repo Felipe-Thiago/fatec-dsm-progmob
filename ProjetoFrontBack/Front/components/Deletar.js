@@ -1,22 +1,38 @@
-import React from 'react';
-import { View, Pressable, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, Button } from 'react-native';
 
 const DeletarDado = (props) => {
+    const [campos, setCampos] = useState([]);
+
     const Deletar = async (id) => {
-        await fetch(`http://localhost:3000/delete/${id}`, {
-          method: 'DELETE',
-        }).then((res)=> res.json())
-        .then((json) => console.log(json))
+        try{
+            await fetch(`http://localhost:3000/delete/${id}`, {
+                method: 'DELETE',
+            }).then((res)=> res.json())
+            .then((json) => {console.log(json); fetchDados()})
+        } catch(error){
+            console.error("Erro ao deletar: ", error)
+        }
+    }
+
+      const fetchDados = () => {
+        try{
+            fetch(`http://localhost:3000/`).then(
+                (res) => {return res.json()}
+              ).then(
+                (json) => {
+                  console.log(json)
+                  setCampos(json);
+                }
+            )
+        } catch(error){
+            console.error("Erro ao deletar dados: ", error)
+        }
+        
       }
     return(
-        <View style={{
-            border: '1px solid black', 
-            margin: 5,
-            padding: 5
-            }}>
-            <Pressable onPress={() => {Deletar(props.id)}}>
-                <Text>Excluir</Text>
-            </Pressable>
+        <View>
+            <Button title="excluir" onPress={() => {Deletar(props.id)}} />
         </View>
     )
 }

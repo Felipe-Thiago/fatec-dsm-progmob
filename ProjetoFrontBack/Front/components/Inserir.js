@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button } from "react-native";
-import { RadioButton } from 'react-native-paper';
+import { View, Text, Button } from "react-native";
+import { RadioButton, TextInput } from 'react-native-paper';
 
 const InserirDado = (props) => {    
     const [nome, setNome] = useState("");
@@ -8,7 +8,24 @@ const InserirDado = (props) => {
     const host = "http://localhost:3000"
     const [value, setValue] = useState('');
 
+    const fetchDados = () => {
+      try{
+        fetch(`${host}/`).then(
+          (res) => {return res.json()}
+        ).then(
+          (json) => {
+            console.log(json)
+            setCampos(json);
+          }
+        )
+      } catch(error){
+        console.error("Erro ao sincronizar para inserir dados: ", error)
+      }
+      
+    }
+
     const addUser = () => {
+      try{
         fetch(`${host}/add/`, {
           method: 'POST',
           body: JSON.stringify({
@@ -22,8 +39,12 @@ const InserirDado = (props) => {
         }).then(
           (res) => {res.json()}
         ).then(
-          (json) => {console.log(json);}
+          (json) => {console.log(json); fetchDados()}
         )
+      } catch(error){
+        console.error("Erro ao adicionar usuário para inserir dados:", error)
+      }
+        
       }
 
     return(
@@ -32,13 +53,15 @@ const InserirDado = (props) => {
             margin: 5,
             padding: 5            
             }}>
-            <Text>Nome</Text>
-            <TextInput 
+            <TextInput
+                label={"Nome"}
+                mode="outlined"
                 onChangeText={(text) => {setNome(text)}}
             />
-            <Text>Sobrenome</Text>
             <TextInput 
-              onChangeText={(text) => {setSobrenome(text)}}
+                label={"Sobrenome"}
+                mode="outlined"
+                onChangeText={(text) => {setSobrenome(text)}}
             />
             <Text>Sexo</Text>
             <RadioButton.Group onValueChange={newValue => setValue(newValue)} value={value}>

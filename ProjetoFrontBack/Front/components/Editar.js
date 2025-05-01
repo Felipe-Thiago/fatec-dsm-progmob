@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, Pressable, Text, TextInput } from 'react-native';
-import { RadioButton } from "react-native-paper";
+import { View, Button } from 'react-native';
+import { RadioButton, List, TextInput } from "react-native-paper";
 
 const EditarDado = (props) => {
     const [nome, setNome] = useState("");
@@ -8,6 +8,7 @@ const EditarDado = (props) => {
     const [sexo, setSexo] = useState("");
 
     const Atualizar = async (id) => {
+      try{
         await fetch(`http://localhost:3000/update/${id}`, {
           method: 'PUT',
           body: JSON.stringify({
@@ -21,6 +22,10 @@ const EditarDado = (props) => {
         })
         .then((res) => res.json())
         .then((json) => console.log(json))
+      } catch(error){
+        console.error("Erro ao editar: ", error)
+      }
+        
     } 
 
     return(
@@ -29,22 +34,18 @@ const EditarDado = (props) => {
                     margin: 5,
                     padding: 5
                     }}>
-                    <Pressable onPress={() => {Atualizar(props.id)}}>
-                        <Text>Editar</Text>
-                    </Pressable>
-                    <Text>Nome:</Text>
-                    <TextInput 
-                        onChangeText={(text) => {setNome(text)}}
-                    />
-                    <Text>Sobrenome:</Text>
-                    <TextInput 
-                        onChangeText={(text) => {setSobrenome(text)}}
-                    />
-                    <Text>Sexo:</Text>
-                    <RadioButton.Group onValueChange={newValue => setSexo(newValue)} value={sexo}>
-                      <RadioButton.Item label="Masculino" value="Masculino"/>
-                      <RadioButton.Item label="Feminino" value="Feminino"/>
-                    </RadioButton.Group>
+                      <List.Accordion title="Editar">
+                        <TextInput label="Nome" mode="outlined" onChangeText={(text) => {setNome(text)}} />
+                        <TextInput label="Sobrenome" mode="outlined" onChangeText={(text) => {setSobrenome(text)}}/>
+                        <List.Item title="Sexo:"/>
+                        <RadioButton.Group onValueChange={newValue => setSexo(newValue)} value={sexo}>
+                          <RadioButton.Item label="Masculino" value="Masculino"/>
+                          <RadioButton.Item label="Feminino" value="Feminino"/>
+                        </RadioButton.Group>
+
+                        <Button title="Editar" onPress={() => {Atualizar(props.id)}} />
+                      </List.Accordion>
+                    
                 </View>
     )
 }

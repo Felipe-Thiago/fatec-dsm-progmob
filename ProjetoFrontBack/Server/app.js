@@ -36,7 +36,7 @@ mongoose.connect(url)
 )
 
 //criar uma estrutura no documento e coleção
-let User = mongoose.model("Usuario", new mongoose.Schema({name: String}))
+let User = mongoose.model("Usuario", new mongoose.Schema({name: String, surname: String, gender: String}))
 
 
 // pasta raiz/rota padrão (get find())

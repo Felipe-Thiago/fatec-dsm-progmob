@@ -1,9 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
 import ExibirDado from './components/Exibir';
 import InserirDado from './components/Inserir';
-import { RadioButton } from 'react-native-paper';
 
 export default function App() {
   // Será utilizada para armazenar os dados do banco de dados
@@ -22,60 +21,82 @@ export default function App() {
     )
   }
   
-  useEffect(() => {
+  const handleFetchDados = () => { useEffect(() => {
     fetchDados();
-  }, []); //executa a função apenas uma vez, evita uma lista infinita de requisições
+  }, [])}; //executa a função apenas uma vez, evita uma lista infinita de requisições
 
   const addUser = () => {
-    fetch(`${host}/add/`, {
-      method: 'POST',
-      body: JSON.stringify({
-        name: 'Felipe',
-        surname: 'Thiago',
-        gender: 'Masculino'
-      }),
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-      }
-    }).then(
-      (res) => {res.json()}
-    ).then(
-      (json) => {console.log(json); fetchDados();}
-    )
+    try{
+      fetch(`${host}/add/`, {
+        method: 'POST',
+        body: JSON.stringify({
+          name: 'Felipe',
+          surname: 'Thiago',
+          gender: 'Masculino'
+        }),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+      }).then(
+        (res) => {res.json()}
+      ).then(
+        (json) => {console.log(json); fetchDados();}
+      )
+    } catch(error){
+      console.error("Erro: ", error);
+      Alert.alert("Erro", `Erro: ${error}`, [
+        { text: 'Fechar', style: 'cancel'}
+      ])
+    }
+    
   }
   
   
   const Exibir = () => {
-    fetch(`${host}/`).then(
-      (res) => {return res.json()} //quando tem chaves precisa de return
-    ).then(
-      (json) => {console.log(json); fetchDados();}
-    )
+    try{
+      fetch(`${host}/`).then(
+        (res) => {return res.json()} //quando tem chaves precisa de return
+      ).then(
+        (json) => {console.log(json); Alert.alert("Exibir", `${json}`); fetchDados();} 
+      )
+    } catch (error){
+      console.error("Erro ao exibir dados: ", error)
+    }
+    
     
   }
 
   const Atualizar0 = (id) => {
-    fetch(`${host}/update/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        name: 'xx',
-        surname: 'yy',
-        gender: 'Feminino'
-      }),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-      }
-    })
-    .then((res) => res.json())
-    .then((json) => {console.log(json); fetchDados();})
+    try{
+      fetch(`${host}/update/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          name: 'xx',
+          surname: 'yy',
+          gender: 'Feminino'
+        }),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+      })
+      .then((res) => res.json())
+      .then((json) => {console.log(json); fetchDados();})
+    } catch (error){
+      console.error("Erro ao Atualizar informações: ", error)
+    }
+    
   } 
 
   //delete
   const Deletar = (id) => {
-    fetch(`${host}/delete/${id}`, {
-      method: 'DELETE',
-    }).then((res)=> res.json())
-    .then((json) => {console.log(json); fetchDados();})
+    try{
+      fetch(`${host}/delete/${id}`, {
+        method: 'DELETE',
+      }).then((res)=> res.json())
+      .then((json) => {console.log(json); fetchDados();})
+    } catch (error){
+      console.error("Erro ao deletar: ", error)
+    }
   }
 
   return (
@@ -83,7 +104,7 @@ export default function App() {
       <ScrollView>
       <Button 
         title='Exibir'
-        onPress={() => {Exibir()}}
+        onPress={() => {Exibir();}}
       />
 
       <Button 
@@ -101,8 +122,8 @@ export default function App() {
         onPress={() => {Deletar("68128798735d70d7f25d4c72")}}
       />
 
-      <InserirDado />
-      <ExibirDado campo={campos}/>
+      <InserirDado onDataChange={handleFetchDados}/>
+      <ExibirDado campo={campos} onPress={() => fetchDados()}/>
       
       <StatusBar style="auto" />
       </ScrollView>
